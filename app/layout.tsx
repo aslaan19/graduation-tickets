@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "تذاكر التخرج | Graduation Tickets",
   description:
-    "المنصة الموثوقة لبيع وشراء تذاكر حفلات التخرج ومراتب الشرف - جامعة الملك سعود",
+    "المنصة الموثوقة لبيع وشراء تذاكر حفلات التخرج ومراتب الشرف - جامعة الملك فهد",
   generator: "v0.app",
   icons: {
     icon: [
