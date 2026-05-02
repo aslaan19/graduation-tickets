@@ -237,13 +237,7 @@ function SellContent() {
 
   const handleSubmit = async () => {
     setError("");
-    if (
-      !form.name ||
-      !form.email ||
-      !form.phone ||
-      !form.price_sar ||
-      !form.contact_methods
-    ) {
+    if (!form.name || !form.phone || !form.price_sar || !form.contact_methods) {
       setError(
         isRtl
           ? "يرجى ملء جميع الحقول المطلوبة"
@@ -651,6 +645,7 @@ function SellContent() {
                   className="sell-input"
                   name="email"
                   type="email"
+                  placeholder="don't want to use your email put a dot (.)"
                   value={form.email}
                   onChange={handleChange}
                 />
