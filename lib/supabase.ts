@@ -18,5 +18,7 @@ export interface Offer {
   price_sar: number
   contact_methods: string
   status: OfferStatus
+    gender: 'male' | 'female'   // ← زود السطر ده
+
   created_at: string
 }

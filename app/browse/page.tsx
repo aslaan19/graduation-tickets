@@ -15,7 +15,6 @@ import {
   MessageSquare,
   Calendar,
   Ticket,
-  Tag,
   ArrowRight,
   ArrowLeft,
 } from "lucide-react";
@@ -47,6 +46,28 @@ function OfferModal({
     };
   }, []);
 
+  const genderLabel =
+    offer.gender === "female"
+      ? lang === "ar"
+        ? "👩 نساء"
+        : "👩 Female"
+      : lang === "ar"
+        ? "👨 رجال"
+        : "👨 Male";
+
+  const genderColor =
+    offer.gender === "female"
+      ? {
+          bg: "rgba(253,242,248,0.3)",
+          border: "rgba(252,231,243,0.5)",
+          text: "#fce7f3",
+        }
+      : {
+          bg: "rgba(239,246,255,0.3)",
+          border: "rgba(219,234,254,0.5)",
+          text: "#dbeafe",
+        };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -77,7 +98,8 @@ function OfferModal({
             <X className="h-4 w-4" />
           </button>
 
-          <div className="mb-3">
+          {/* Status + Gender badges */}
+          <div className="mb-3 flex items-center gap-2 flex-wrap">
             <span
               className="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
               style={{
@@ -90,6 +112,16 @@ function OfferModal({
               }}
             >
               {offer.status === "available" ? t.availableBadge : t.soldBadge}
+            </span>
+            <span
+              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold"
+              style={{
+                background: genderColor.bg,
+                color: genderColor.text,
+                border: `1px solid ${genderColor.border}`,
+              }}
+            >
+              {genderLabel}
             </span>
           </div>
 
@@ -205,17 +237,19 @@ function BrowseContent() {
   const [loading, setLoading] = useState(true);
   const [typeFilter, setTypeFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("available");
+  const [genderFilter, setGenderFilter] = useState("all");
   const [selectedOffer, setSelectedOffer] = useState<Offer | null>(null);
 
   useEffect(() => {
     fetchOffers();
-  }, [typeFilter, statusFilter]);
+  }, [typeFilter, statusFilter, genderFilter]);
 
   const fetchOffers = async () => {
     setLoading(true);
     const params = new URLSearchParams();
     if (typeFilter !== "all") params.set("type", typeFilter);
     if (statusFilter !== "all") params.set("status", statusFilter);
+    if (genderFilter !== "all") params.set("gender", genderFilter);
     const res = await fetch("/api/offers?" + params.toString());
     const data = await res.json();
     setOffers(data.offers || []);
@@ -239,6 +273,33 @@ function BrowseContent() {
     "honors_third",
   ];
   const statuses = ["all", "available", "sold"];
+  const genders = [
+    { value: "all", label: t.allGenders },
+    { value: "male", label: "👨 " + t.male },
+    { value: "female", label: "👩 " + t.female },
+  ];
+
+  const FilterBtn = ({
+    active,
+    onClick,
+    children,
+  }: {
+    active: boolean;
+    onClick: () => void;
+    children: React.ReactNode;
+  }) => (
+    <button
+      className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
+        active
+          ? "border-transparent text-white"
+          : "border-border bg-white text-muted-foreground hover:border-[#1a5c35] hover:text-[#1a5c35]"
+      }`}
+      style={active ? { background: "#1a5c35" } : {}}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
 
   return (
     <div
@@ -283,7 +344,6 @@ function BrowseContent() {
               </p>
             </div>
           </Link>
-
           <div className="flex items-center gap-3">
             <Link
               href={`/sell?lang=${lang}`}
@@ -310,6 +370,7 @@ function BrowseContent() {
           </h2>
           <p className="text-sm text-muted-foreground">{t.university}</p>
         </div>
+
         {/* Notice Banner */}
         <div
           className="mb-6 rounded-2xl border-2 p-5"
@@ -338,46 +399,55 @@ function BrowseContent() {
             </div>
           </div>
         </div>
+
         {/* Filters */}
         <div className="mb-6 rounded-2xl border border-border bg-white p-5 shadow-sm">
-          {/* Type Filter */}
+          {/* Type */}
           <div className="mb-4">
             <p className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
               {isRTL ? "نوع التذكرة" : "Ticket Type"}
             </p>
             <div className="flex flex-wrap gap-2">
               {ticketTypes.map((type) => (
-                <button
+                <FilterBtn
                   key={type}
-                  className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
-                    typeFilter === type
-                      ? "border-transparent text-white"
-                      : "border-border bg-white text-muted-foreground hover:border-[#1a5c35] hover:text-[#1a5c35]"
-                  }`}
-                  style={typeFilter === type ? { background: "#1a5c35" } : {}}
+                  active={typeFilter === type}
                   onClick={() => setTypeFilter(type)}
                 >
                   {getTypeLabel(type)}
-                </button>
+                </FilterBtn>
               ))}
             </div>
           </div>
 
-          {/* Status Filter */}
+          {/* Gender */}
+          <div className="mb-4">
+            <p className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+              {isRTL ? "الجنس" : "Gender"}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {genders.map((g) => (
+                <FilterBtn
+                  key={g.value}
+                  active={genderFilter === g.value}
+                  onClick={() => setGenderFilter(g.value)}
+                >
+                  {g.label}
+                </FilterBtn>
+              ))}
+            </div>
+          </div>
+
+          {/* Status */}
           <div>
             <p className="mb-3 text-xs font-bold uppercase tracking-wider text-muted-foreground">
               {isRTL ? "الحالة" : "Status"}
             </p>
             <div className="flex flex-wrap gap-2">
               {statuses.map((s) => (
-                <button
+                <FilterBtn
                   key={s}
-                  className={`rounded-full border px-4 py-2 text-sm font-semibold transition-all ${
-                    statusFilter === s
-                      ? "border-transparent text-white"
-                      : "border-border bg-white text-muted-foreground hover:border-[#1a5c35] hover:text-[#1a5c35]"
-                  }`}
-                  style={statusFilter === s ? { background: "#1a5c35" } : {}}
+                  active={statusFilter === s}
                   onClick={() => setStatusFilter(s)}
                 >
                   {s === "all"
@@ -385,7 +455,7 @@ function BrowseContent() {
                     : s === "available"
                       ? t.available
                       : t.sold}
-                </button>
+                </FilterBtn>
               ))}
             </div>
           </div>
@@ -398,7 +468,7 @@ function BrowseContent() {
           </p>
         )}
 
-        {/* Loading State */}
+        {/* Loading */}
         {loading ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -414,7 +484,6 @@ function BrowseContent() {
             ))}
           </div>
         ) : offers.length === 0 ? (
-          /* Empty State */
           <div className="rounded-2xl border border-border bg-white py-16 text-center">
             <div
               className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full"
@@ -430,12 +499,10 @@ function BrowseContent() {
               className="inline-flex items-center gap-2 font-semibold transition-colors hover:underline"
               style={{ color: "#1a5c35" }}
             >
-              {t.sell}
-              <Arrow className="h-4 w-4" />
+              {t.sell} <Arrow className="h-4 w-4" />
             </Link>
           </div>
         ) : (
-          /* Offers Grid */
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {offers.map((offer) => (
               <div
@@ -446,11 +513,7 @@ function BrowseContent() {
                 {/* Status & Date */}
                 <div className="mb-3 flex items-center justify-between">
                   <span
-                    className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold ${
-                      offer.status === "available"
-                        ? "border border-green-200 bg-green-50 text-green-700"
-                        : "border border-red-200 bg-red-50 text-red-700"
-                    }`}
+                    className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold ${offer.status === "available" ? "border border-green-200 bg-green-50 text-green-700" : "border border-red-200 bg-red-50 text-red-700"}`}
                   >
                     {offer.status === "available"
                       ? t.availableBadge
@@ -461,11 +524,18 @@ function BrowseContent() {
                   </span>
                 </div>
 
-                {/* Type Badge */}
-                <div className="mb-3">
+                {/* Type + Gender badges */}
+                <div className="mb-3 flex flex-wrap gap-2">
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-700">
                     <Ticket className="h-3 w-3" />
                     {t[offer.ticket_type as keyof typeof t] as string}
+                  </span>
+                  <span
+                    className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${offer.gender === "female" ? "border border-pink-200 bg-pink-50 text-pink-700" : "border border-blue-200 bg-blue-50 text-blue-700"}`}
+                  >
+                    {offer.gender === "female"
+                      ? "👩 " + t.female
+                      : "👨 " + t.male}
                   </span>
                 </div>
 
@@ -474,7 +544,7 @@ function BrowseContent() {
                   {offer.name}
                 </p>
 
-                {/* Price & Quantity */}
+                {/* Price & Qty */}
                 <div className="mb-4 flex items-center justify-between rounded-xl border border-border bg-muted/30 p-3">
                   <div>
                     <p className="text-xs font-medium text-muted-foreground">
@@ -501,7 +571,7 @@ function BrowseContent() {
                   </div>
                 </div>
 
-                {/* View Details Button */}
+                {/* View Details */}
                 <div
                   className="flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-bold text-white transition-all group-hover:gap-3"
                   style={{ background: "#1a5c35" }}

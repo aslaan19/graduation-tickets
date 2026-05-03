@@ -4,7 +4,6 @@ import { useSearchParams } from "next/navigation";
 import { translations, Lang } from "@/lib/translations";
 import Link from "next/link";
 
-/* ─── Inline styles as a design system ─── */
 const ds = {
   green: "#16502e",
   greenLight: "#1e6b3e",
@@ -28,145 +27,33 @@ const ds = {
 
 const globalCss = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600&display=swap');
-
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif;
-    background: ${ds.bg};
-    color: ${ds.text};
-    -webkit-font-smoothing: antialiased;
-  }
-
+  body { font-family: 'DM Sans', 'Segoe UI', system-ui, sans-serif; background: ${ds.bg}; color: ${ds.text}; -webkit-font-smoothing: antialiased; }
   .rtl { direction: rtl; }
   .ltr { direction: ltr; }
-
-  /* Grain overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
-  }
-
-  .sell-input {
-    width: 100%;
-    padding: 13px 15px;
-    border: 1.5px solid ${ds.border};
-    border-radius: ${ds.radiusSm};
-    font-family: inherit;
-    font-size: 15px;
-    color: ${ds.text};
-    background: ${ds.surface};
-    outline: none;
-    transition: border-color 0.18s, box-shadow 0.18s;
-    appearance: none;
-    -webkit-appearance: none;
-  }
-  .sell-input:focus {
-    border-color: ${ds.green};
-    box-shadow: 0 0 0 3px rgba(22,80,46,0.1);
-  }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 9999; opacity: 0.4; }
+  .sell-input { width: 100%; padding: 13px 15px; border: 1.5px solid ${ds.border}; border-radius: ${ds.radiusSm}; font-family: inherit; font-size: 15px; color: ${ds.text}; background: ${ds.surface}; outline: none; transition: border-color 0.18s, box-shadow 0.18s; appearance: none; -webkit-appearance: none; }
+  .sell-input:focus { border-color: ${ds.green}; box-shadow: 0 0 0 3px rgba(22,80,46,0.1); }
   .sell-input::placeholder { color: ${ds.subtle}; }
   textarea.sell-input { resize: vertical; min-height: 96px; line-height: 1.6; }
-
-  .label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    color: ${ds.muted};
-    margin-bottom: 7px;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-  }
-
-  .btn-main {
-    width: 100%;
-    padding: 15px;
-    background: ${ds.green};
-    color: #fff;
-    border: none;
-    border-radius: ${ds.radiusSm};
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
-    letter-spacing: 0.01em;
-  }
-  .btn-main:hover:not(:disabled) {
-    background: ${ds.greenLight};
-    box-shadow: 0 4px 14px rgba(22,80,46,0.28);
-    transform: translateY(-1px);
-  }
+  .label { display: block; font-size: 13px; font-weight: 600; color: ${ds.muted}; margin-bottom: 7px; letter-spacing: 0.03em; text-transform: uppercase; }
+  .btn-main { width: 100%; padding: 15px; background: ${ds.green}; color: #fff; border: none; border-radius: ${ds.radiusSm}; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.18s, transform 0.12s, box-shadow 0.18s; letter-spacing: 0.01em; }
+  .btn-main:hover:not(:disabled) { background: ${ds.greenLight}; box-shadow: 0 4px 14px rgba(22,80,46,0.28); transform: translateY(-1px); }
   .btn-main:active:not(:disabled) { transform: translateY(0); }
   .btn-main:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .btn-ghost {
-    width: 100%;
-    padding: 14px;
-    background: transparent;
-    color: ${ds.green};
-    border: 1.5px solid ${ds.green};
-    border-radius: ${ds.radiusSm};
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.18s;
-    letter-spacing: 0.01em;
-  }
+  .btn-ghost { width: 100%; padding: 14px; background: transparent; color: ${ds.green}; border: 1.5px solid ${ds.green}; border-radius: ${ds.radiusSm}; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.18s; letter-spacing: 0.01em; }
   .btn-ghost:hover { background: ${ds.greenGhost}; }
-
-  /* Step progress */
-  .step-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    transition: all 0.3s;
-  }
-
-  /* Fade-in animation */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+  .custom-check { width: 20px; height: 20px; border: 2px solid ${ds.amberBorder}; border-radius: 5px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: border-color 0.18s, background 0.18s; background: white; }
+  .custom-check.checked { background: ${ds.green}; border-color: ${ds.green}; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
   .fade-up { animation: fadeUp 0.38s ease both; }
   .fade-up-2 { animation: fadeUp 0.38s 0.07s ease both; }
   .fade-up-3 { animation: fadeUp 0.38s 0.14s ease both; }
-
-  /* Success ring */
-  @keyframes scaleIn {
-    from { transform: scale(0.6); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
-  }
+  @keyframes scaleIn { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
   .scale-in { animation: scaleIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both; }
-
-  /* Checkbox custom */
-  .custom-check {
-    width: 20px; height: 20px;
-    border: 2px solid ${ds.amberBorder};
-    border-radius: 5px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    transition: border-color 0.18s, background 0.18s;
-    background: white;
-  }
-  .custom-check.checked {
-    background: ${ds.green};
-    border-color: ${ds.green};
-  }
-
-  @media (max-width: 600px) {
-    .grid-2 { grid-template-columns: 1fr !important; }
-    .page-header h1 { font-size: 26px !important; }
-  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr !important; } }
 `;
 
-/* ─── Field wrapper ─── */
 function Field({
   label,
   required,
@@ -203,7 +90,6 @@ function Field({
   );
 }
 
-/* ─── Main content ─── */
 function SellContent() {
   const searchParams = useSearchParams();
   const [lang, setLang] = useState<Lang>(
@@ -225,6 +111,7 @@ function SellContent() {
     quantity: "1",
     price_sar: "",
     contact_methods: "",
+    gender: "male",
   });
 
   const handleChange = (
@@ -257,7 +144,6 @@ function SellContent() {
     else setSubmitted(true);
   };
 
-  /* ── Success state ── */
   if (submitted) {
     return (
       <div
@@ -285,7 +171,6 @@ function SellContent() {
             border: `1px solid ${ds.border}`,
           }}
         >
-          {/* Icon */}
           <div
             style={{
               width: 72,
@@ -302,7 +187,6 @@ function SellContent() {
           >
             ✓
           </div>
-
           <h2
             style={{
               fontFamily: "'DM Serif Display', Georgia, serif",
@@ -314,7 +198,6 @@ function SellContent() {
           >
             {t.offerPosted}
           </h2>
-
           <p
             style={{
               color: ds.muted,
@@ -325,7 +208,6 @@ function SellContent() {
           >
             {t.offerPostedDesc}
           </p>
-
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             <button
               className="btn-main"
@@ -340,6 +222,7 @@ function SellContent() {
                   quantity: "1",
                   price_sar: "",
                   contact_methods: "",
+                  gender: "male",
                 });
               }}
             >
@@ -357,7 +240,6 @@ function SellContent() {
     );
   }
 
-  /* ── Main form ── */
   return (
     <div
       className={isRtl ? "rtl" : "ltr"}
@@ -432,7 +314,6 @@ function SellContent() {
               </div>
             </div>
           </Link>
-
           <button
             onClick={() => setLang(isRtl ? "en" : "ar")}
             style={{
@@ -446,21 +327,20 @@ function SellContent() {
               fontWeight: 600,
               transition: "all 0.18s",
             }}
-            onMouseEnter={(e) => (
-              (e.currentTarget.style.borderColor = ds.green),
-              (e.currentTarget.style.color = ds.green)
-            )}
-            onMouseLeave={(e) => (
-              (e.currentTarget.style.borderColor = ds.border),
-              (e.currentTarget.style.color = ds.muted)
-            )}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = ds.green;
+              e.currentTarget.style.color = ds.green;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = ds.border;
+              e.currentTarget.style.color = ds.muted;
+            }}
           >
             {t.switchLang}
           </button>
         </div>
       </nav>
 
-      {/* Page content */}
       <div
         style={{ maxWidth: 620, margin: "0 auto", padding: "40px 20px 80px" }}
       >
@@ -498,7 +378,6 @@ function SellContent() {
             </span>
           </div>
           <h1
-            className="page-header"
             style={{
               fontFamily: "'DM Serif Display', Georgia, serif",
               fontSize: 32,
@@ -512,7 +391,7 @@ function SellContent() {
           </h1>
         </div>
 
-        {/* Warning card */}
+        {/* Commission warning */}
         <div
           className="fade-up-2"
           style={{
@@ -525,7 +404,6 @@ function SellContent() {
             overflow: "hidden",
           }}
         >
-          {/* Decorative left strip */}
           <div
             style={{
               position: "absolute",
@@ -537,7 +415,6 @@ function SellContent() {
               borderRadius: isRtl ? "0 4px 4px 0" : "4px 0 0 4px",
             }}
           />
-
           <p
             style={{
               fontWeight: 700,
@@ -549,7 +426,6 @@ function SellContent() {
           >
             {t.commissionWarning}
           </p>
-
           <div
             style={{
               color: "#78350f",
@@ -561,8 +437,6 @@ function SellContent() {
           >
             {t.commissionText}
           </div>
-
-          {/* Agree checkbox */}
           <div
             style={{
               marginTop: 18,
@@ -605,7 +479,7 @@ function SellContent() {
           </div>
         </div>
 
-        {/* Form card */}
+        {/* Form */}
         <div
           className="fade-up-3"
           style={{
@@ -640,12 +514,12 @@ function SellContent() {
                 gap: 16,
               }}
             >
-              <Field label={t.email} required>
+              <Field label={t.email}>
                 <input
                   className="sell-input"
                   name="email"
                   type="email"
-                  placeholder="don't want to use your email put a dot (.)"
+                  placeholder="."
                   value={form.email}
                   onChange={handleChange}
                 />
@@ -660,6 +534,40 @@ function SellContent() {
                 />
               </Field>
             </div>
+
+            {/* Gender */}
+            <Field label={t.gender} required>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "1fr 1fr",
+                  gap: 12,
+                }}
+              >
+                {(["male", "female"] as const).map((g) => (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => setForm({ ...form, gender: g })}
+                    style={{
+                      padding: "13px",
+                      borderRadius: ds.radiusSm,
+                      border: `2px solid ${form.gender === g ? ds.green : ds.border}`,
+                      background:
+                        form.gender === g ? ds.greenGhost : ds.surface,
+                      color: form.gender === g ? ds.green : ds.muted,
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      fontSize: 15,
+                      transition: "all 0.15s",
+                      fontFamily: "inherit",
+                    }}
+                  >
+                    {g === "male" ? "👨 " + t.male : "👩 " + t.female}
+                  </button>
+                ))}
+              </div>
+            </Field>
 
             {/* Ticket type */}
             <Field label={t.ticketType} required>
@@ -766,7 +674,6 @@ function SellContent() {
             </Field>
           </div>
 
-          {/* Error */}
           {error && (
             <div
               style={{
@@ -788,7 +695,6 @@ function SellContent() {
             </div>
           )}
 
-          {/* Submit */}
           <button
             className="btn-main"
             style={{ marginTop: 24 }}
@@ -799,7 +705,6 @@ function SellContent() {
           </button>
         </div>
 
-        {/* Footer note */}
         <p
           style={{
             textAlign: "center",

@@ -1,6 +1,10 @@
 export const translations = {
   ar: {
     dir: 'rtl', lang: 'ar',
+    gender: 'Gender',
+male: 'Male',
+female: 'Female',
+allGenders: 'All',
     siteName: 'تذاكر التخرج',
     university: 'جامعة الملك فهد للبترول والمعادن',
     siteSubtitle: 'سوق تذاكر حفلات التخرج ومراتب الشرف',
@@ -24,7 +28,11 @@ export const translations = {
     submitOffer: 'نشر العرض',
     commissionWarning: '⚠️ تنبيه مهم — يُرجى القراءة قبل النشر',
     commissionText: `بمجرد بيع تذكرتك، يلزمك تحويل عمولة بنسبة 4% من سعر البيع لصاحب الموقع.
-
+// في ar
+gender: 'الجنس',
+male: 'رجال',
+female: 'نساء',
+allGenders: 'الكل',
 هذا اتفاق بينك وبين الله، واللّٰه شاهد على كل ما تفعل. اتقِ الله في معاملاتك.
 
 بعد البيع، يجب عليك:
@@ -83,7 +91,11 @@ browseNoticeText: 'الموقع ما يبيع ولا يشتري — بس يجم�
   },
   en: {
     dir: 'ltr', lang: 'en',
-    
+    // في en
+gender: 'Gender',
+male: 'Male',
+female: 'Female',
+allGenders: 'All',
     siteName: 'Graduation Tickets',
     university: 'King Fahd University of Petroleum & Minerals',
     siteSubtitle: 'Marketplace for graduation & honors ceremony tickets',
@@ -160,6 +172,7 @@ The site owner will follow up with you. Allah sees all.`,
     totalTickets: 'Available tickets',
     close: 'Close',
     switchLang: 'عربي',
+    
 browseNoticeTitle: '🚀 Act fast — tickets sell quickly!',
 browseNoticeText: "This website doesn't handle buying or selling — it only connects sellers with buyers. When you find an offer that works for you, contact the seller directly and close the deal between yourselves. All listings are trusted and sellers are committed. Don't wait — the offer you like might be gone!",
   }

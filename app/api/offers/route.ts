@@ -17,6 +17,10 @@ export async function GET(request: NextRequest) {
   if (status && status !== 'all') {
     query = query.eq('status', status)
   }
+  const gender = searchParams.get('gender')
+  if (gender && gender !== 'all') {
+    query = query.eq('gender', gender)
+  }
 
   const { data, error } = await query
 
@@ -38,13 +42,11 @@ export async function POST(request: NextRequest) {
   const { data, error } = await supabase
     .from('offers')
     .insert([{
-      name,
-      email,
-      phone,
-      ticket_type,
+      name, email, phone, ticket_type,
       quantity: parseInt(quantity),
       price_sar: parseFloat(price_sar),
       contact_methods,
+      gender: body.gender || 'male',
       status: 'available',
     }])
     .select()
